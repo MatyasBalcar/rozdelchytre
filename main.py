@@ -25,10 +25,20 @@ def addExpense(payer, people, amount):
     for user in users:
         if user!=payer:
             user.changeDebt(debt)
+def showExpenses(people):
+    for user in people:
+        if user.debt >0:
+            print(f"User {user.name} owes {user.debt}. ")
+        elif user.debt<0:
+            print(f"User {user.name} is owed {user.debt *-1}")
+        else:
+            print(f"User doesnt owe anything.")
+## TEST CODE ##
 addUser("bali")
 addUser("fofo")
 
 addExpense(users[0],users ,100)
 
 print(users[0].debt)
-    
+
+showExpenses(users)
