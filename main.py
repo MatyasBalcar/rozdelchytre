@@ -48,15 +48,34 @@ def showDebts(people):
             print(user.debts_list)
         else:
             print(f"{user.name} is up to date.")
+
+def setleDebts(debtor, payer):
+    total=0
+    for x in debtor.debts_list:
+        if x == payer.name:
+            total+=debtor.debts_list[x]
+    print(f"{debtor.name} owes {payer.name}:{total} in total")
+    ready=input("Do you want to settle? [y/n]")
+    if ready=="y":
+        to_delete=[]
+        for x in debtor.debts_list:
+            if x == payer.name:
+                to_delete.append(x)
+        for y in to_delete:
+            del debtor.debts_list[y]
+        debtor.changeDebt(-total)
+        print(f"Debts between {debtor.name} and {payer.name} have been settled.")
+    else:
+        print('Debts have NOT been settled')
+
 #* -->TEST CODE<-- 
 addUser("bali")
 addUser("fofo")
 
 addExpense(users_dict['bali'],users ,100)
 
-print(users_dict['bali'].debt)
 
-showExpenses(users)
 showDebts(users)
-
+setleDebts(users_dict['fofo'], users_dict['bali'])
+showDebts(users)
 #* -->END TEST CODE<--
