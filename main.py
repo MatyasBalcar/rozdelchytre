@@ -10,13 +10,14 @@ class User:
     #changes debt amount based on amount given
     def changeDebt(self, amount):
         self.debt+=amount
+    #adds the amount and payer to the dict
     def newDebt(self, amount, debtor):
         self.debts_list[debtor]=(amount)
-#adds a user based on name
+#*adds a user based on name
 def addUser(name):
     users.append(User(name))
 
-#add an expense
+#*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
     debt =  amount / (len(people))
@@ -30,6 +31,7 @@ def addExpense(payer, people, amount):
         if user!=payer:
             user.changeDebt(debt)
             user.newDebt(debt, payer.name)
+#*shows expenses with users (totals)
 def showExpenses(people):
     for user in people:
         if user.debt >0:
@@ -38,13 +40,15 @@ def showExpenses(people):
             print(f"User {user.name} is owed {user.debt *-1}")
         else:
             print(f"User doesnt owe anything.")
+#*shows individuals debts for users
 def showDebts(people):
     for user in people:
-
-        print(f"{user.name}'s debts")
-        print(user.debts_list)
-
-## TEST CODE ##
+        if user.debts_list!={}:
+            print(f"{user.name}'s debts")
+            print(user.debts_list)
+        else:
+            print(f"{user.name} is up to date.")
+#* -->TEST CODE<-- 
 addUser("bali")
 addUser("fofo")
 
@@ -54,3 +58,4 @@ print(users[0].debt)
 
 showExpenses(users)
 showDebts(users)
+#* -->END TEST CODE<--
