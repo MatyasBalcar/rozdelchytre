@@ -1,12 +1,13 @@
 #stores users in an array, no user can exist outside of it
 users=[]
-
+users_dict={}
 #template for a user
 class User:
     def __init__(self, name):
         self.name =  name
         self.debt =0#negative is good
         self.debts_list= {}
+        users_dict[self.name]=self
     #changes debt amount based on amount given
     def changeDebt(self, amount):
         self.debt+=amount
@@ -16,7 +17,6 @@ class User:
 #*adds a user based on name
 def addUser(name):
     users.append(User(name))
-
 #*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
@@ -52,10 +52,11 @@ def showDebts(people):
 addUser("bali")
 addUser("fofo")
 
-addExpense(users[0],users ,100)
+addExpense(users_dict['bali'],users ,100)
 
-print(users[0].debt)
+print(users_dict['bali'].debt)
 
 showExpenses(users)
 showDebts(users)
+
 #* -->END TEST CODE<--
