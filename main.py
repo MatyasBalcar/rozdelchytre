@@ -26,8 +26,21 @@ class User:
             pickle.dump(self.debts_list,pkl)
 #*Saves the information from users
 def saveAppInfo(people):
+    names=[]
     for person in people:
         person.save()
+        names.append(person.name)
+    #*OPENS NAMES.txt and saves the current data
+    file = open('names.txt', 'r')
+    content = file.read()
+    items = content.splitlines()
+    file.close()
+    for i in items:
+        names.append(i)
+    with open("names.txt","w") as f:
+        for i in names:
+            f.write(i+'\n')
+    f.close()
     #! TODO: curenty we can save individual people, we want to save names to a single files, from names we can then get the pkl files with debts
 
 def loadAppInfo():
@@ -127,5 +140,6 @@ while run:
     else:
         print("Goodbye!")
         saveAppInfo(users)
+        print("App info saved sucessfully!")
         time.sleep(5)
         run = False
