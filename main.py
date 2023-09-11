@@ -1,5 +1,5 @@
 #imports
-import time
+import time,pickle
 
 #ELEMENTAL VARIABLES
 #stores users in an array, no user can exist outside of it
@@ -20,6 +20,19 @@ class User:
     #adds the amount and payer to the dict
     def newDebt(self, amount, debtor):
         self.debts_list[debtor]=(amount)
+    def save(self):
+        #debts_list
+        with open(str(self.name)+'.pkl','wb') as pkl:
+            pickle.dump(self.debts_list,pkl)
+#*Saves the information from users
+def saveAppInfo(people):
+    for person in people:
+        person.save()
+    #! TODO: curenty we can save individual people, we want to save names to a single files, from names we can then get the pkl files with debts
+
+def loadAppInfo():
+    pass
+
 #*adds a user based on name
 def addUser(name):
     users.append(User(name))
@@ -90,7 +103,6 @@ def testFunc():
 #testFunc()
 
 #*-->MAIN LOOP<--
-
 while run:
     action=input("""Select an action to do: \n
                  [1] - ADD USER \n
@@ -114,5 +126,6 @@ while run:
         setleDebts(debtor,payer)
     else:
         print("Goodbye!")
+        saveAppInfo(users)
         time.sleep(5)
         run = False
