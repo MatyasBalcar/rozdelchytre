@@ -46,7 +46,6 @@ def saveAppInfo(people):
         for i in names:
             f.write(i + '\n')
 
-    print(f"saved {names}")
     f.close()
     
 
@@ -64,6 +63,10 @@ def loadAppInfo():
 #*adds a user based on name
 def addUser(name):
     users.append(User(name))
+def showUsers(people):
+    print("USERS:")
+    for user in people:
+        print(user.name)
 #*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
@@ -141,6 +144,7 @@ while run:
                  [2] - ADD EXPENSE \n
                  [3] - SHOW DEBTS\n
                  [4] - SETTLE A DEBT\n
+                 [5] - SHOW USERS \n
                  anything else - QUIT\n
                  """)
     if action=='1':
@@ -156,6 +160,8 @@ while run:
         debtor=users_dict[input("Who is the debtor: ")]
         payer=users_dict[input("Who is the payer: ")]
         setleDebts(debtor,payer)
+    elif action=='5':
+        showUsers(users)
     else:
         print("Goodbye!")
         saveAppInfo(users)
