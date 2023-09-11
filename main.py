@@ -26,22 +26,29 @@ class User:
             pickle.dump(self.debts_list,pkl)
 #*Saves the information from users
 def saveAppInfo(people):
-    names=[]
+    names = set()  # Use a set to store unique names
+
     for person in people:
         person.save()
-        names.append(person.name)
-    #*OPENS NAMES.txt and saves the current data
-    file = open('names.txt', 'r')
-    content = file.read()
-    items = content.splitlines()
-    file.close()
+        names.add(person.name)  # Add the name to the set
+
+    # Open names.txt and read the current data
+    with open('names.txt', 'r') as file:
+        content = file.read()
+        items = content.splitlines()
+
+    # Iterate over the items and add them to the set
     for i in items:
-        names.append(i)
-    with open("names.txt","w") as f:
+        names.add(i)
+
+    # Write the unique names back to names.txt
+    with open("names.txt", "w") as f:
         for i in names:
-            f.write(i+'\n')
+            f.write(i + '\n')
+
+    print(f"saved {names}")
     f.close()
-    #! TODO: now we just need to load it propetly
+    
 
 def loadAppInfo():
     file = open('names.txt', 'r')
@@ -124,9 +131,11 @@ def testFunc():
 #testFunc()
 
 #*-->MAIN LOOP<--
+loadAppInfo()
+
+print("User's info loaded succesfully!")
 while run:
-    loadAppInfo()
-    print("User's info loaded succesfully!")
+
     action=input("""Select an action to do: \n
                  [1] - ADD USER \n
                  [2] - ADD EXPENSE \n
