@@ -1,5 +1,5 @@
 #imports
-import time,pickle
+import time,pickle,os
 
 #ELEMENTAL VARIABLES
 #stores users in an array, no user can exist outside of it
@@ -26,6 +26,7 @@ class User:
             pickle.dump(self.debts_list,pkl)
 #*Saves the information from users
 def saveAppInfo(people):
+
     names = set()  # Use a set to store unique names
 
     for person in people:
@@ -47,8 +48,7 @@ def saveAppInfo(people):
             f.write(i + '\n')
 
     f.close()
-    
-
+#*Load apps info
 def loadAppInfo():
     file = open('names.txt', 'r')
     content = file.read()
@@ -59,6 +59,46 @@ def loadAppInfo():
         with open(name+'.pkl','rb') as pkl:
             person=pickle.load(pkl)
         users_dict[name].debts_list=person    
+#*deletes user
+def deleteUser(user):
+    #deletes the user from users array
+    to_delete=[]
+    for u in users:
+        if u.name == user.name:
+            to_delete.append(u)
+    for u in to_delete:
+        users.remove(u)
+    print(f"to delete and users: {to_delete}")
+    print(users)
+    #deletes user from users dict
+    del users_dict[user.name]
+
+    #removes user.name from names.txt
+    names = set()  # Use a set to store unique names
+
+    for person in users:
+        person.save()
+        names.add(person.name)  # Add the name to the set
+
+    # Open names.txt and read the current data
+    with open('names.txt', 'r') as file:
+        content = file.read()
+        items = content.splitlines()
+
+    # Iterate over the items and add them to the set
+    for i in items:
+        names.add(i)
+
+    # Write the unique names back to names.txt
+    names.discard(user.name)
+    with open("names.txt", "w") as f:
+        for i in names:
+            f.write(i + '\n')
+
+    f.close()
+
+    #!TODO REMOVE .pkl files also
+
 
 #*adds a user based on name
 def addUser(name):
@@ -67,6 +107,7 @@ def showUsers(people):
     print("USERS:")
     for user in people:
         print(user.name)
+    print(users_dict)
 #*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
@@ -132,7 +173,6 @@ def testFunc():
     setleDebts(users_dict['fofo'], users_dict['bali'])
     showDebts(users)
 #testFunc()
-
 #*-->MAIN LOOP<--
 loadAppInfo()
 
@@ -145,6 +185,7 @@ while run:
                  [3] - SHOW DEBTS\n
                  [4] - SETTLE A DEBT\n
                  [5] - SHOW USERS \n
+                 [6] - DELETE A USER\n
                  anything else - QUIT\n
                  """)
     if action=='1':
@@ -162,6 +203,11 @@ while run:
         setleDebts(debtor,payer)
     elif action=='5':
         showUsers(users)
+    elif action=='6':
+        showUsers(users)
+        user_to_delete=input("Which user do you want to delete : ")
+        deleteUser(users_dict[user_to_delete])
+
     else:
         print("Goodbye!")
         saveAppInfo(users)
