@@ -1,6 +1,12 @@
+#imports
+import time
+
+#ELEMENTAL VARIABLES
 #stores users in an array, no user can exist outside of it
 users=[]
 users_dict={}
+
+run = True
 #template for a user
 class User:
     def __init__(self, name):
@@ -82,3 +88,31 @@ def testFunc():
     setleDebts(users_dict['fofo'], users_dict['bali'])
     showDebts(users)
 #testFunc()
+
+#*-->MAIN LOOP<--
+
+while run:
+    action=input("""Select an action to do: \n
+                 [1] - ADD USER \n
+                 [2] - ADD EXPENSE \n
+                 [3] - SHOW DEBTS\n
+                 [4] - SETTLE A DEBT\n
+                 anything else - QUIT\n
+                 """)
+    if action=='1':
+        name = input("Enter name: ")
+        addUser(name)
+    elif action=='2':
+        payer = users_dict[input("Who paid: ")]
+        amount = int(input("How much was the amount: "))
+        addExpense(payer,users,amount)
+    elif action=='3':
+        showDebts(users)
+    elif action=='4':
+        debtor=users_dict[input("Who is the debtor: ")]
+        payer=users_dict[input("Who is the payer: ")]
+        setleDebts(debtor,payer)
+    else:
+        print("Goodbye!")
+        time.sleep(5)
+        run = False
