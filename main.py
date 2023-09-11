@@ -96,9 +96,10 @@ def deleteUser(user):
             f.write(i + '\n')
 
     f.close()
-
-    #!TODO REMOVE .pkl files also
-
+    #deletes the pkl file
+    user_pkl_file = user.name + '.pkl'
+    if os.path.exists(user_pkl_file):
+        os.remove(user_pkl_file)
 
 #*adds a user based on name
 def addUser(name):
@@ -107,7 +108,7 @@ def showUsers(people):
     print("USERS:")
     for user in people:
         print(user.name)
-    print(users_dict)
+
 #*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
