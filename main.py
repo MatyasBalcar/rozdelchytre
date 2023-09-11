@@ -41,10 +41,18 @@ def saveAppInfo(people):
         for i in names:
             f.write(i+'\n')
     f.close()
-    #! TODO: curenty we can save individual people, we want to save names to a single files, from names we can then get the pkl files with debts
+    #! TODO: now we just need to load it propetly
 
 def loadAppInfo():
-    pass
+    file = open('names.txt', 'r')
+    content = file.read()
+    items = content.splitlines()
+    file.close()
+    for name in items:
+        addUser(name)
+        with open(name+'.pkl','rb') as pkl:
+            person=pickle.load(pkl)
+        users_dict[name].debts_list=person    
 
 #*adds a user based on name
 def addUser(name):
@@ -117,6 +125,8 @@ def testFunc():
 
 #*-->MAIN LOOP<--
 while run:
+    loadAppInfo()
+    print("User's info loaded succesfully!")
     action=input("""Select an action to do: \n
                  [1] - ADD USER \n
                  [2] - ADD EXPENSE \n
