@@ -69,13 +69,16 @@ def setleDebts(debtor, payer):
         print('Debts have NOT been settled')
 
 #* -->TEST CODE<-- 
-addUser("bali")
-addUser("fofo")
+#?call this function to test the code
+def testFunc():
 
-addExpense(users_dict['bali'],users ,100)
+    addUser("bali")
+    addUser("fofo")
+
+    addExpense(users_dict['bali'],users ,100)
 
 
-showDebts(users)
-setleDebts(users_dict['fofo'], users_dict['bali'])
-showDebts(users)
-#* -->END TEST CODE<--
+    showDebts(users)
+    setleDebts(users_dict['fofo'], users_dict['bali'])
+    showDebts(users)
+#testFunc()
