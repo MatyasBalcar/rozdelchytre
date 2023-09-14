@@ -178,40 +178,60 @@ def calculateDebtOnAmount(people,payer):
 loadAppInfo()
 
 print("User's info loaded succesfully!")
+"""
+*RESCTRUCTURE OF UI
+!  USERS  
+    ?  A  ADD USER - same
+    ?  B  DELETE USER
+    ?  C  SHOW USERS
+!  2  ADD A DEBT 
+    ? A  ADD DEBT EQUAL
+    ? B  ADD DEBT BY AMOUNT
+!  3  SETTLE DEBT
+!  4  SHOW DEBTS
+"""
 while run:
 
     action=input("""Select an action to do: \n
-                 [1] - ADD USER \n
-                 [2] - ADD EXPENSE \n
-                 [3] - SHOW DEBTS\n
-                 [4] - SETTLE A DEBT\n
-                 [5] - SHOW USERS \n
-                 [6] - DELETE A USER\n
-                 [7] - ADD EXPENSE (by amount - beta)\n
+                 [1] - USER ACTIONS \n
+                 [2] - DEBT ACTIONS \n
+                 [3] - SETTLE A DEBT\n
+                 [4] - SHOW DEBTS\n
                  anything else - QUIT\n
                  """)
     if action=='1':
-        name = input("Enter name: ")
-        addUser(name,users)
-    elif action=='2':
-        payer = users_dict[input("Who paid: ")]
-        amount = int(input("How much was the amount: "))
-        addExpense(payer,users,amount)
-    elif action=='3':
-        showDebts(users)
-    elif action=='4':
-        debtor=users_dict[input("Who is the debtor: ")]
+        user_action = input("""
+                            [A] - ADD USER
+                            [B] - DELETE USER
+                            [C] - SHOW USERS\n
+                            """).capitalize()
+        if user_action=="A":
+            name=input("What is the name of the user : ")
+            addUser(name,users)
+        elif user_action=="B":
+            showUsers(users)
+            name=input("Which user do you want to delete : ")
+            deleteUser(name)
+        elif user_action=="C":
+            showUsers(users)
+    elif action=="2":
+                debt_action = input("""
+                            [A] - ADD EQUAL DEBT
+                            [B] - ADD DEBT BY AMOUNT\n
+                            """).capitalize()
+                if debt_action=="A":
+                    payer=users_dict[input("Who paid for this: ")]
+                    amount= int(input("How much did this cost: "))
+                    addExpense(payer,users,amount)
+                elif debt_action=="B":
+                    payer=users_dict[input("Who paid for this: ")]
+                    calculateDebtOnAmount(users,payer)
+    elif action=="3":
         payer=users_dict[input("Who is the payer: ")]
-        setleDebts(debtor,payer)
-    elif action=='5':
-        showUsers(users)
-    elif action=='6':
-        showUsers(users)
-        user_to_delete=input("Which user do you want to delete : ")
-        deleteUser(users_dict[user_to_delete])
-    elif action=="7":
-        payer=users_dict[input("Who paid for this : ")]
-        calculateDebtOnAmount(users,payer)
+        debtor=users_dict[input("Who is the debtor: ")]
+        setleDebts(debtor, payer)
+    elif action=="4":
+        showDebts(users)
 
     else:
         print("Goodbye!")
