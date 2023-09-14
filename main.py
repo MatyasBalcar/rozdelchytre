@@ -55,7 +55,7 @@ def loadAppInfo():
     items = content.splitlines()
     file.close()
     for name in items:
-        addUser(name)
+        addUser(name,users)
         with open(name+'.pkl','rb') as pkl:
             person=pickle.load(pkl)
         users_dict[name].debts_list=person    
@@ -100,15 +100,13 @@ def deleteUser(user):
     user_pkl_file = user.name + '.pkl'
     if os.path.exists(user_pkl_file):
         os.remove(user_pkl_file)
-
 #*adds a user based on name
-def addUser(name):
-    users.append(User(name))
+def addUser(name,people):
+    people.append(User(name))
 def showUsers(people):
     print("USERS:")
     for user in people:
         print(user.name)
-
 #*add an expense
 def addExpense(payer, people, amount):
     #debt for the debtors
@@ -140,7 +138,7 @@ def showDebts(people):
             print(user.debts_list)
         else:
             print(f"{user.name} is up to date.")
-
+#*Settles debts
 def setleDebts(debtor, payer):
     total=0
     for x in debtor.debts_list:
@@ -159,21 +157,23 @@ def setleDebts(debtor, payer):
         print(f"Debts between {debtor.name} and {payer.name} have been settled.")
     else:
         print('Debts have NOT been settled')
+#*Creates debt based on amount
+def calculateDebtOnAmount(people,payer):
+    total=0
+    debts_dict={}
+    for i in people:
+        if i.name!=payer.name:
+            amount=int(input(f"How much does {i.name} owe: "))
+            total+=amount
+            debts_dict[i.name]=amount
+            i.changeDebt(amount)
+            i.newDebt(amount,payer.name)
+    payer.changeDebt(-total)
+    print(f"Succesfully assigned debts and {payer.name} is now owed {total}")
+    for i in debts_dict:
+        print(i)
+    
 
-#* -->TEST CODE<-- 
-#?call this function to test the code
-def testFunc():
-
-    addUser("bali")
-    addUser("fofo")
-
-    addExpense(users_dict['bali'],users ,100)
-
-
-    showDebts(users)
-    setleDebts(users_dict['fofo'], users_dict['bali'])
-    showDebts(users)
-#testFunc()
 #*-->MAIN LOOP<--
 loadAppInfo()
 
@@ -187,11 +187,12 @@ while run:
                  [4] - SETTLE A DEBT\n
                  [5] - SHOW USERS \n
                  [6] - DELETE A USER\n
+                 [7] - ADD EXPENSE (by amount - beta)\n
                  anything else - QUIT\n
                  """)
     if action=='1':
         name = input("Enter name: ")
-        addUser(name)
+        addUser(name,users)
     elif action=='2':
         payer = users_dict[input("Who paid: ")]
         amount = int(input("How much was the amount: "))
@@ -208,6 +209,9 @@ while run:
         showUsers(users)
         user_to_delete=input("Which user do you want to delete : ")
         deleteUser(users_dict[user_to_delete])
+    elif action=="7":
+        payer=users_dict[input("Who paid for this : ")]
+        calculateDebtOnAmount(users,payer)
 
     else:
         print("Goodbye!")
