@@ -24,7 +24,13 @@ class User:
         #debts_list
         with open(str(self.name)+'.pkl','wb') as pkl:
             pickle.dump(self.debts_list,pkl)
-#! ADD SAVING self.debt AS WELL, ALTHOUGH THIS COULD BE CACLULCATED < IT WOULD BE EASIER TO SAVE IT AS A FILE
+        with open(str(self.name)+'-debt.txt','w')as file:
+            if self.debt !=0:
+                file.write(str(self.debt))
+            else:
+                file.write(str(0))
+            print("Succesfully saved debt file")
+
 #*Saves the information from users
 def saveAppInfo(people):
 
@@ -59,7 +65,20 @@ def loadAppInfo():
         addUser(name,users)
         with open(name+'.pkl','rb') as pkl:
             person=pickle.load(pkl)
-        users_dict[name].debts_list=person    
+        users_dict[name].debts_list=person  
+        try:
+            with open(name+'-debt.txt','r') as file:
+                debt = file.read()
+                if debt !='':
+                    debt=float(debt)
+                else:
+                    debt = 0
+        except:
+            with open(name+'-debt.txt','w') as file:
+                debt = 0
+                file.write(debt)
+        users_dict[name].changeDebt(debt)
+    
 #*deletes user
 def deleteUser(user):
     #deletes the user from users array
@@ -131,7 +150,7 @@ def addExpense(payer, people, amount):
         if user!=payer and user.name not in people_to_exclude:
             user.changeDebt(debt)
             user.newDebt(debt, payer.name)
-    #!MULTIPLE DEBTS DONT WORK< THE EXCLUSION IS APLIED TO THE NEXT ONE, EVEN THOUGH IT SHOUDLnT BE
+
 #*shows expenses with users (totals)
 def showExpenses(people):
     for user in people:
