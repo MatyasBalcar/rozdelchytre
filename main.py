@@ -24,6 +24,7 @@ class User:
         #debts_list
         with open(str(self.name)+'.pkl','wb') as pkl:
             pickle.dump(self.debts_list,pkl)
+#! ADD SAVING self.debt AS WELL, ALTHOUGH THIS COULD BE CACLULCATED < IT WOULD BE EASIER TO SAVE IT AS A FILE
 #*Saves the information from users
 def saveAppInfo(people):
 
@@ -109,18 +110,28 @@ def showUsers(people):
         print(user.name)
 #*add an expense
 def addExpense(payer, people, amount):
+    all_people=people
+    #Exclude people
+    exclude = input("Do you want to exclude someone [y/n]: ").capitalize()
+    people_to_exclude=[]
+    if exclude=="Y":
+        people_to_exclude = input("who do you want to exclude (separate by , if multiple) : ")
+        people_to_exclude = people_to_exclude.split(",")
+
+
     #debt for the debtors
-    debt =  amount / (len(people))
+    debt =  amount / (len(all_people)-len(people_to_exclude))
     #what the guy payed for the other people aka all - his share
-    payed= (amount - debt)*-1
+    payed= (amount - debt)*-1   
     payer.changeDebt(payed)
 
     print(f"added expense to {payer.name} of {payed}")
     #adding debt to all people but the payer
-    for user in users:
-        if user!=payer:
+    for user in all_people:
+        if user!=payer and user.name not in people_to_exclude:
             user.changeDebt(debt)
             user.newDebt(debt, payer.name)
+    #!MULTIPLE DEBTS DONT WORK< THE EXCLUSION IS APLIED TO THE NEXT ONE, EVEN THOUGH IT SHOUDLnT BE
 #*shows expenses with users (totals)
 def showExpenses(people):
     for user in people:
@@ -175,21 +186,10 @@ def calculateDebtOnAmount(people,payer):
     
 
 #*-->MAIN LOOP<--
-loadAppInfo()
 
+loadAppInfo()
 print("User's info loaded succesfully!")
-"""
-*RESCTRUCTURE OF UI
-!  USERS  
-    ?  A  ADD USER - same
-    ?  B  DELETE USER
-    ?  C  SHOW USERS
-!  2  ADD A DEBT 
-    ? A  ADD DEBT EQUAL
-    ? B  ADD DEBT BY AMOUNT
-!  3  SETTLE DEBT
-!  4  SHOW DEBTS
-"""
+print(users)
 while run:
 
     action=input("""Select an action to do: \n
